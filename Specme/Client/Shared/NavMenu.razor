@@ -1,30 +1,37 @@
-﻿<div class="sidebar @navbarClass">
+﻿@inject AppState appState
+
+<div class="sidebar @navbarClass">
 
     <div class="top-row pl-4 navbar navbar-dark">
-        <a class="navbar-brand" href="">Specme</a>
-
         <span class="oi oi-menu text-white clickable" @onclick="ToggleNavMenu"></span>
 
-        <button class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="navbar-brand" href="">Specme</a>
     </div>
 
-    <div class="nav-menu-links" @onclick="ToggleNavMenu">
+    <div class="nav-menu-links">
         <ul class="nav flex-column">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                    <span class="oi oi-home" aria-hidden="true"></span>
+                    <span class="nav-title">Home</span>
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="counter">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Counter
+                    <span class="oi oi-plus" aria-hidden="true"></span>
+                    <span class="nav-title">Counter</span>
                 </NavLink>
             </li>
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="fetchdata">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+                    <span class="oi oi-list-rich" aria-hidden="true"></span>
+                    <span class="nav-title">Fetch data</span>
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="projects">
+                    <span class="oi oi-aperture" aria-hidden="true"></span>
+                    <span class="nav-title">Projects</span>
                 </NavLink>
             </li>
         </ul>
@@ -32,12 +39,11 @@
 </div>
 
 @code {
-    private bool collapseNavMenu = false;
-
-    private string navbarClass => collapseNavMenu ? "navbar-collapsed" : "";
+    private string navbarClass => appState.CollapseNavMenu ? "navbar-collapsed" : "";
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        appState.CollapseNavMenu = !appState.CollapseNavMenu;
+        Console.WriteLine("test");
     }
 }

@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 using System.Text;
 using Microsoft.AspNetCore.Blazor.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Specme.Client.Models;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Specme.Client.Services;
 
 namespace Specme.Client
 {
@@ -14,7 +18,23 @@ namespace Specme.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            await builder.Build().RunAsync();
+            // DI
+            builder.Services.AddSingleton<AppState>();
+            builder.Services.AddSingleton<ProjectService>();
+
+            builder.Services
+                  .AddBlazorise(options =>
+                  {
+                      options.ChangeTextOnKeyPress = true;
+                  })
+                  .AddBootstrapProviders();
+
+            var host = builder.Build();
+
+            host.Services
+                .UseBootstrapProviders();
+
+            await host.RunAsync();
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿@page "/counter"
 
+@inject AppState appState
+
 <h1>Counter</h1>
 
-<p>Current count: @currentCount</p>
+<p>Current count: @appState.Counter</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
@@ -11,6 +13,6 @@
 
     private void IncrementCount()
     {
-        currentCount++;
+        appState.Counter++;
     }
 }

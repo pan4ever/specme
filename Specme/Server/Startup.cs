@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Specme.Server.DB;
+using Specme.Server.Hubs;
 using System.Linq;
 
 namespace Specme.Server
@@ -19,6 +22,11 @@ namespace Specme.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
+            services.AddSignalR();
+
+            services.AddDbContext<SpecmeContext>(options =>
+                options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=specme;Trusted_Connection=True;MultipleActiveResultSets=true")
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,8 +48,10 @@ namespace Specme.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapHub<ChatHub>("/chatHub");
                 endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
+
         }
     }
 }

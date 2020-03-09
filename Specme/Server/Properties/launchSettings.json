@@ -18,6 +18,7 @@
     "Specme.Server": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "projects",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

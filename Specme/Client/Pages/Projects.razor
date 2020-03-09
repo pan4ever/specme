@@ -1,0 +1,89 @@
+﻿@page "/projects"
+
+
+@inject ProjectService projectService
+
+<h1>Projects</h1>
+
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var project in projects)
+        {
+            <div class="col-md-3">
+                <Card>
+                    <CardHeader>
+                        @project.Title
+                    </CardHeader>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">@project.Description</li>
+                    </ul>
+                </Card>
+
+            </div>
+        }
+    </div>
+
+    <Button Color="Color.Primary" Clicked="@ShowModalNew" Class="float-right">Show Modal</Button>
+
+</div>
+
+
+<Modal @ref="modalRef">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>Employee edit</ModalTitle>
+            <CloseButton Clicked="@HideModalNew" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Title *</FieldLabel>
+                <TextEdit Placeholder="Enter title..." @bind-Text="newProject.Title" />
+            </Field>
+            <Field>
+                <FieldLabel>Description</FieldLabel>
+                <TextEdit Placeholder="Enter description..." @bind-Text="newProject.Description" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModalNew">Close</Button>
+            <Button Color="Color.Primary" Clicked="@SaveNew">Save Changes</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
+@code {
+
+    // reference to the modal component
+    private Project newProject = new Project();
+    private Modal modalRef;
+
+    private void ShowModalNew()
+    {
+        modalRef.Show();
+    }
+
+    private void HideModalNew()
+    {
+        modalRef.Hide();
+    }
+
+    private async Task SaveNew()
+    {
+        var createdProject = await projectService.Add(newProject);
+        projects = projects.Append(createdProject);
+        //this.StateHasChanged();
+
+        HideModalNew();
+        newProject = new Project();
+    }
+
+    private IEnumerable<Project> projects = new Project[] { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await projectService.GetAll();
+        Console.WriteLine(projects.Count());
+    }
+}
