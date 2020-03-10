@@ -1,4 +1,16 @@
 ﻿@import url(open-iconic/font/css/open-iconic-bootstrap.min.css);
+.project-card .card-header {
+  background-color: #04034d;
+  color: #fff; }
+
+.project-card .project-action {
+  display: none;
+  margin-left: 0.3rem;
+  padding: 0.14rem; }
+
+.project-card:hover .project-action {
+  display: inline; }
+
 html, body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 

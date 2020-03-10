@@ -25,7 +25,7 @@ namespace Specme.Client.Services
 
         public async Task<Project> GetOne(string id)
         {
-            return await http.GetJsonAsync<Project>($"Project?id={id}");
+            return await http.GetJsonAsync<Project>($"Project/{id}");
         }
 
         public async Task<Project> Add(Project newProject)
@@ -35,14 +35,12 @@ namespace Specme.Client.Services
 
         public async Task<Project> Update(Project project)
         {
-            var url = $"Project?id={project.UUID}";
-            return await http.PutJsonAsync<Project>(url, project);
+            return await http.PutJsonAsync<Project>($"Project/{project.UUID}", project);
         }
 
         public async Task Remove(Project project)
         {
-            var url = $"Project?id={project.UUID}";
-            await http.DeleteAsync(url);
+            await http.DeleteAsync($"Project/{project.UUID}");
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿@import '../css/open-iconic/font/css/open-iconic-bootstrap.min.css';
+﻿@import "../lib/bootstrap/scss/functions";
+@import "../lib/bootstrap/scss/variables";
+@import "project";
+@import '../css/open-iconic/font/css/open-iconic-bootstrap.min.css';
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

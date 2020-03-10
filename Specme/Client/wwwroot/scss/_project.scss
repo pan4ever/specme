@@ -1,0 +1,21 @@
+﻿@import "../lib/bootstrap/scss/functions";
+@import "../lib/bootstrap/scss/variables";
+
+$project-color: #04034d;
+
+.project-card {
+    .card-header {
+        background-color: $project-color;
+        color: $white;
+    }
+
+    .project-action {
+        display: none;
+        margin-left: 0.3rem;
+        padding: 0.14rem;
+    }
+
+    &:hover .project-action {
+        display: inline;
+    }
+}

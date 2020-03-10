@@ -22,10 +22,10 @@
 </ul>
 
 @code {
-    HubConnection hubConnection;
+    HubConnection? hubConnection;
     List<string> messages = new List<string>();
-    string userInput;
-    string messageInput;
+    string? userInput;
+    string? messageInput;
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,5 +45,5 @@
 
     Task Send() => hubConnection.SendAsync("SendMessage", userInput, messageInput);
 
-    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
 }

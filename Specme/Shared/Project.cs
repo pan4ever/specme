@@ -6,9 +6,9 @@ namespace Specme.Shared
 {
     public class Project
     {
-        public string UUID { get; set; }
-        public string Title { get; set; }
+        public string UUID { get; set; } = Guid.NewGuid().ToString();
+        public string? Title { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }

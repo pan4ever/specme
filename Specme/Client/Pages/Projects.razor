@@ -9,10 +9,26 @@
     <div class="row">
         @foreach (var project in projects)
         {
-            <div class="col-md-3">
-                <Card>
+            <div class="col-md-3 mb-4">
+                <Card Class="project-card">
                     <CardHeader>
                         @project.Title
+                        <Button Color="Color.Danger"
+                                Size="ButtonSize.Small"
+                                Float="Float.Right"
+                                class="project-action"
+                                @onclick="(() => Remove(project))"
+                                >
+                            ❌
+                        </Button>
+                        <Button Color="Color.Primary"
+                                Size="ButtonSize.Small"
+                                Float="Float.Right"
+                                class="project-action"
+                                @onclick="(() => ShowModalEdit(project))"
+                                >
+                            ✏
+                        </Button>
                     </CardHeader>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">@project.Description</li>
@@ -23,7 +39,7 @@
         }
     </div>
 
-    <Button Color="Color.Primary" Clicked="@ShowModalNew" Class="float-right">Show Modal</Button>
+    <Button Color="Color.Primary" Clicked="@ShowModalNew" Class="float-right">➕ Add new project</Button>
 
 </div>
 
@@ -32,22 +48,22 @@
     <ModalBackdrop />
     <ModalContent IsCentered="true">
         <ModalHeader>
-            <ModalTitle>Employee edit</ModalTitle>
-            <CloseButton Clicked="@HideModalNew" />
+            <ModalTitle>Edit project</ModalTitle>
+            <CloseButton Clicked="@HideModal" />
         </ModalHeader>
         <ModalBody>
             <Field>
                 <FieldLabel>Title *</FieldLabel>
-                <TextEdit Placeholder="Enter title..." @bind-Text="newProject.Title" />
+                <TextEdit Placeholder="Enter title..." @bind-Text="modalProject.Title" />
             </Field>
             <Field>
                 <FieldLabel>Description</FieldLabel>
-                <TextEdit Placeholder="Enter description..." @bind-Text="newProject.Description" />
+                <TextEdit Placeholder="Enter description..." @bind-Text="modalProject.Description" />
             </Field>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="@HideModalNew">Close</Button>
-            <Button Color="Color.Primary" Clicked="@SaveNew">Save Changes</Button>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+            <Button Color="Color.Primary" Clicked="@Save">Save</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
@@ -56,27 +72,47 @@
 @code {
 
     // reference to the modal component
-    private Project newProject = new Project();
-    private Modal modalRef;
+    private Project modalProject = new Project();
+    private Modal? modalRef;
+    private bool isCreationMode = true;
 
     private void ShowModalNew()
     {
-        modalRef.Show();
+        isCreationMode = true;
+        modalRef?.Show();
     }
 
-    private void HideModalNew()
+    private void ShowModalEdit(Project project)
     {
-        modalRef.Hide();
+        isCreationMode = false;
+        modalProject = project;
+        modalRef?.Show();
     }
 
-    private async Task SaveNew()
+    private void HideModal()
     {
-        var createdProject = await projectService.Add(newProject);
-        projects = projects.Append(createdProject);
-        //this.StateHasChanged();
+        modalProject = new Project();
+        modalRef?.Hide();
+    }
 
-        HideModalNew();
-        newProject = new Project();
+    private async Task Save()
+    {
+        if (isCreationMode)
+        {
+            await projectService.Add(modalProject);
+            projects = projects.Append(modalProject);
+        } 
+        else
+        {
+            await projectService.Update(modalProject);
+        }
+        HideModal();
+    }
+
+    private async Task Remove(Project project)
+    {
+        await projectService.Remove(project);
+        projects = projects.Where(p => p != project);
     }
 
     private IEnumerable<Project> projects = new Project[] { };
